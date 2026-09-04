@@ -1,0 +1,6 @@
+{
+  "name": "CGE DRIP DROP - IDLE CLICKER",
+  "description": "Mobile idle clicker game with holographic diamond ice cream, gold drip, adorable cats, upgrades, holo diamond icon maker, and background editor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
