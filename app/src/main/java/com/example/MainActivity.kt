@@ -14,13 +14,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import com.example.model.BackgroundTheme
 import com.example.model.ScreenTab
 import com.example.ui.components.CgeBottomNavBar
 import com.example.ui.components.CosmicStarfieldBackground
+import com.example.ui.components.GoldCounter
 import com.example.ui.components.InfoDialog
 import com.example.ui.components.OfflineEarningsDialog
 import com.example.ui.components.SettingsDialog
@@ -137,6 +140,19 @@ fun MainAppScreen(
                     ScreenTab.BG_EDITOR -> BackgroundEditorScreen(uiState = uiState, viewModel = viewModel)
                 }
             }
+        }
+
+        // Persistent Gold Counter (Top Right)
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .statusBarsPadding()
+                .padding(top = 8.dp)
+        ) {
+            GoldCounter(
+                diamonds = uiState.formattedDiamonds,
+                buttonStyle = uiState.buttonStyle
+            )
         }
 
         // Global Dialogs

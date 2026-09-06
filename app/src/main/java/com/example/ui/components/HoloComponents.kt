@@ -4,15 +4,25 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
@@ -134,6 +145,65 @@ fun HoloRainbowBorderBox(
             .clip(shape)
     ) {
         content()
+    }
+}
+
+@Composable
+fun CgeButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    buttonStyle: ButtonStyle = ButtonStyle.HOLO_CHROME,
+    enabled: Boolean = true,
+    shape: Shape = RoundedCornerShape(16.dp)
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.92f else 1.0f,
+        label = "button_scale"
+    )
+
+    HoloRainbowBorderBox(
+        modifier = modifier
+            .scale(scale)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                enabled = enabled,
+                onClick = onClick
+            ),
+        shape = shape,
+        buttonStyle = buttonStyle,
+        borderWidth = if (enabled) 2.dp else 1.dp
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.White.copy(alpha = if (enabled) 0.15f else 0.05f),
+                            Color.White.copy(alpha = if (enabled) 0.05f else 0.02f)
+                        )
+                    )
+                )
+                .padding(horizontal = 24.dp, vertical = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = text,
+                color = if (enabled) Color.White else Color.Gray,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = if (enabled) Color.Black.copy(alpha = 0.5f) else Color.Transparent,
+                        offset = Offset(2f, 2f),
+                        blurRadius = 4f
+                    )
+                )
+            )
+        }
     }
 }
 
